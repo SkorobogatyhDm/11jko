@@ -64,17 +64,17 @@ def vnutri(dec_num, bit):
 
 def add_one(binary_str):
     result = list(binary_str)  
-    carry = 1 
+    number = 1 
     
     for i in range(len(result) - 1, -1, -1):  
-        if carry == 0:
+        if number == 0:
             break
             
         if result[i] == '1':
             result[i] = '0'
         else:
             result[i] = '1'
-            carry = 0
+            number = 0
 
     return ''.join(result)
 
@@ -99,10 +99,6 @@ if __name__ == "__main__":
             print(vnutri(int(dec_num, input_base), bit))
     elif operation == '-':
         output_base = int(input("Введите СС, в которую хотите преобразовать 2, 8, 10, 16: "))
-        print(Main(operation, dec_num, input_base, output_base))
-    else:
-        print("Некорректная операция. Пожалуйста, выберите '+' или '-'.")
-        output_base = int(input("Введите СС, в которую хотите преобразовать 2,8,10,16: "))
         print(Main(operation, dec_num, input_base, output_base))
     else:
         print("Некорректная операция. Пожалуйста, выберите '+' или '-'.")
