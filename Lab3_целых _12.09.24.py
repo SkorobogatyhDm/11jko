@@ -26,7 +26,7 @@ def Base(input_base, dec_num, output_base):
     
 def Start(input_base, output_base):
     if input_base < 2 or input_base > 16 or output_base < 2 or output_base > 16:
-        return "Основание системы счисления должно быть от 2 до 16!"
+        return "Основание СС 2,8,10,16"
 def int_conv(dec_num): # Десятичная СС
     return str(dec_num)
 
@@ -86,7 +86,7 @@ def invert(dec_num, bit):
 
 if __name__ == "__main__":
     dec_num = input("Введите число: ")
-    input_base = int(input("Введите начальную СС (2, 8, 10, 16): "))
+    input_base = int(input("Введите начальную СС 2,8,10,16: "))
     operation = input("Нужно ли производить перевод целых, ДА то '+' если НЕТ то '-': ")
 
     if operation == '+':
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         else:
             print(vnutri(int(dec_num, input_base), bit))
     elif operation == '-':
-        output_base = int(input("Введите СС, в которую хотите преобразовать (2, 8, 10, 16): "))
+        output_base = int(input("Введите СС, в которую хотите преобразовать 2,8,10,16: "))
         print(Main(operation, dec_num, input_base, output_base))
     else:
         print("Некорректная операция. Пожалуйста, выберите '+' или '-'.")
