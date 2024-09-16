@@ -48,14 +48,32 @@ def int_vosem(dec_num):
         quotient //= 8
     return result or "0"
 
-def int_shestnadtsat(dec_num):
-    alf = "0123456789ABCDEF"
-    quotient = int(dec_num)
+def int_shestnadtsat(number):  # Шестнадцатеричная СС
+    alf = {
+        0: "0", 
+        1: "1", 
+        2: "2", 
+        3: "3", 
+        4: "4", 
+        5: "5", 
+        6: "6", 
+        7: "7", 
+        8: "8", 
+        9: "9", 
+        10: "A", 
+        11: "B", 
+        12: "C", 
+        13: "D", 
+        14: "E", 
+        15: "F",
+    }
+    if number == 0:
+        return "0"
     result = ""
-    while quotient > 0:
-        result = alf[quotient % 16] + result
-        quotient //= 16
-    return result or "0"
+    while number > 0:
+        result = alf[number % 16] + result
+        number //= 16
+    return result
 
 def vnutri(dec_num, bit):
     line = len(Bit(bit))
