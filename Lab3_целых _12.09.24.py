@@ -48,7 +48,7 @@ def int_vosem(dec_num):
         quotient //= 8
     return result or "0"
 
-def int_shestnadtsat(number):  # Шестнадцатеричная СС
+def int_shestnadtsat(number):  
     alf = {
         0: "0", 
         1: "1", 
