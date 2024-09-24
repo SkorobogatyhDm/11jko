@@ -39,14 +39,10 @@ def ASCII_dict():
         }
         
 def text_to_binary(text, alphabet):
-    # Переводим текст в двоичный код с использованием словаря
     binary_codes = [alphabet[char] for char in text.upper() if char in alphabet]
     return ' '.join(binary_codes)
-
-# Создаем словарь с ручным алфавитом
 alphabet = ASCII_dict()
 
-# Ввод слова от пользователя
 user_input = input("Введите слово: ")
 binary_output = text_to_binary(user_input, alphabet)
 
