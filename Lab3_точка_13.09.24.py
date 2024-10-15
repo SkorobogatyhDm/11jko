@@ -1,146 +1,85 @@
-def convert_to_base():
-    try:
-        num_bytes = int(input("Введите количество байт: "))
-        number = input("Введите число (может быть отрицательным, с десятичной точкой): ")
-        input_base = int(input("Введите систему счисления исходного числа (от 2 до 16): "))
-        output_base = int(input("Введите систему счисления результата (от 2 до 16): "))
-    except ValueError:
-        return "Введите корректные значения!"
+def func2(decimal_number):
+    if ',' in decimal_number:
+        integer_part, fractional_part = decimal_number.split(',')
+    else:
+        integer_part = decimal_number
+        fractional_part = '0'
 
-    if input_base < 2 or input_base > 16 or output_base < 2 or output_base > 16:
-        return "Основание системы счисления должно быть между 2 и 16!"
+    integer_part = int(integer_part)
+    binary_integer_part = ''
 
-    num_to_char = {
-        0: '0', 1: '1', 2: '2', 3: '3', 4: '4',
-        5: '5', 6: '6', 7: '7', 8: '8', 9: '9',
-        10: 'A', 11: 'B', 12: 'C', 13: 'D', 14: 'E', 15: 'F'
+    if integer_part == 0:
+        binary_integer_part = '0'
+    else:
+        while integer_part > 0:
+            binary_integer_part = str(integer_part % 2) + binary_integer_part
+            integer_part //= 2
+
+    fractional_part = float('0.' + fractional_part)
+    binary_fractional_part = ''
+
+    while fractional_part > 0:
+        fractional_part *= 2
+        if fractional_part >= 1:
+            binary_fractional_part += '1'
+            fractional_part -= 1
+        else:
+            binary_fractional_part += '0'
+
+        if len(binary_fractional_part) > 10:
+            break
+
+    if binary_fractional_part:
+        return binary_integer_part + ',' + binary_fractional_part
+    else:
+        return binary_integer_part
+
+def func(byt, num):
+    if "-" not in num:
+        znak = 0
+    else:
+        znak = 1
+        num = num[1:]
+
+    num = func2(num)
+    total_len = byt * 8
+
+    num = num.replace(",", ".")
+    mil_len = str(len(str(int(float(num)))))
+    num = num.replace(".", "")
+    print(mil_len)
+    mil_len_for_twoss = func2(mil_len)
+    print(mil_len_for_twoss)
+    mantissa = str(1000000 + int(mil_len_for_twoss))
+
+    alf = {
+        "0000": "0",
+        "0001": "1",
+        "0010": "2",
+        "0011": "3",
+        "0100": "4",
+        "0101": "5",
+        "0110": "6",
+        "0111": "7",
+        "1000": "8",
+        "1001": "9",
+        "1010": "A",
+        "1011": "B",
+        "1100": "C",
+        "1101": "D",
+        "1110": "E",
+        "1111": "F",
     }
 
-    char_to_num = {v: k for k, v in num_to_char.items()}
-
-    def is_valid_digit(char, base):
-        return char in char_to_num and char_to_num[char] < base
-
-    def validate_number(number, base):
-        if number[0] == '-':
-            number = number[1:]
-        integer_part = ""
-        fractional_part = ""
-        found_dot = False
-        for char in number:
-            if char == '.':
-                if found_dot:
-                    return False
-                found_dot = True
-                continue
-            if found_dot:
-                fractional_part += char
-            else:
-                integer_part += char
-        return all(is_valid_digit(char, base) for char in integer_part) and \
-               all(is_valid_digit(char, base) for char in fractional_part)
-
-    if not validate_number(number, input_base):
-        return "Число содержит недопустимые символы для указанной системы счисления!"
-
-    is_negative = number[0] == '-'
-    if is_negative:
-        number = number[1:]
-
-    integer_part = ""
-    fractional_part = ""
-    found_dot = False
-    for char in number:
-        if char == '.':
-            found_dot = True
-            continue
-        if found_dot:
-            fractional_part += char
-        else:
-            integer_part += char
-
-    def to_binary(integer_part, base):
-        if integer_part == "":
-            return "0"
-        dec_value = 0
-        for i in range(len(integer_part)):
-            char = integer_part[-(i + 1)]
-            dec_value += char_to_num[char] * (base ** i)
-        binary_value = ""
-        while dec_value > 0:
-            binary_value = str(dec_value % 2) + binary_value
-            dec_value //= 2
-        return binary_value
-
-    def fractional_to_binary(fractional_part, base):
-        if fractional_part == "":
-            return ""
-        dec_value = 0
-        for i in range(len(fractional_part)):
-            char = fractional_part[i]
-            dec_value += char_to_num[char] * (base ** -(i + 1))
-        binary_value = ""
-        count = 0
-        while dec_value > 0 and count < 50:  
-            dec_value *= 2
-            bit = int(dec_value)
-            binary_value += str(bit)
-            dec_value -= bit
-            count += 1
-        return binary_value
-
-    integer_bin = to_binary(integer_part, input_base)
-    fractional_bin = fractional_to_binary(fractional_part, input_base)
-    full_binary = integer_bin + fractional_bin
-    if full_binary == "":
-        full_binary = "0"
-    dot_position = len(integer_bin)
-    shifted_binary = "1" + full_binary[dot_position:]
-    order = dot_position
-    order_bin = ""
-    if order < 0:
-        order = -order
-        order_bin = "1"
-    else:
-        order_bin = "0" 
-    while order > 0:
-        order_bin = str(order % 2) + order_bin
-        order //= 2
-    while len(order_bin) < 8:
-        order_bin = '0' + order_bin
-    mantissa = shifted_binary[1:] 
-    while len(mantissa) < 8:
-        mantissa += "0"
-    sign = "1" if is_negative else "0"
-    internal_representation = sign + order_bin + mantissa
-    total_length = num_bytes * 8
-    if len(internal_representation) > total_length:
-        internal_representation = internal_representation[:total_length]
-    elif len(internal_representation) < total_length:
-        internal_representation = internal_representation + '0' * (total_length - len(internal_representation))
-
-    def binary_to_base(binary_value, base):
-        dec_value = 0
-        for i in range(len(binary_value)):
-            bit = binary_value[-(i + 1)]
-            dec_value += int(bit) * (2 ** i)
-
-        base_value = ""
-        if dec_value == 0:
-            base_value = "0"
-        while dec_value > 0:
-            base_value = num_to_char[dec_value % base] + base_value
-            dec_value //= base
-
-        return base_value
-
-    base_value = binary_to_base(internal_representation, output_base)
-    required_length = num_bytes * 2
-    if len(base_value) < required_length:
-        base_value = '0' * (required_length - len(base_value)) + base_value
-
-    return (f"Внутреннее представление (двоичное): {internal_representation}\n"
-            f"Результат в системе счисления {output_base}: {base_value}")
+    internal_perf_temp = f"{znak}{mantissa}{num}"
+    internal_perf = internal_perf_temp + ("0" * (total_len - len(internal_perf_temp)))
+    print(f"Внутренние представление: {internal_perf}")
+    for_16ss_arr = [internal_perf[i:i+4] for i in range(0, len(internal_perf), 4)]
+    print(f"\nМассив: {for_16ss_arr}")
+    result_16ss = "".join([alf[i] for i in for_16ss_arr])
+    print(f"В 16сс: {result_16ss}")
 
 if __name__ == "__main__":
-    print(convert_to_base())
+    byt = 4
+    num = "-168,375"
+    func(byt, num)
